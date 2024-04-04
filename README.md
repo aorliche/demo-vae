@@ -18,6 +18,8 @@ This is important because many datasets are skewed with respect to demographics.
 Prediction based on fMRI may be predicting the phenotype of interest OR predicting the demographic (age, sex, race, etc.) 
 and inferring the phenotype based on the inherent demographic bias in the dataset.
 
+In some cases, decorrelating latents from demographic information destroys predictive ability.
+
 <img src='https://github.com/aorliche/demo-vae/blob/3643570b74438692338e278cfcd541e69d20fb2c/image/WRAT_Predict.png'>
 
 We find that most clinical and cognitive battery fields in the PNC and BSNIP datasets are biased by demographics,
