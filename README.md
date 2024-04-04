@@ -22,7 +22,7 @@ In some cases, decorrelating latents from demographic information destroys predi
 
 <img src='https://github.com/aorliche/demo-vae/blob/3643570b74438692338e278cfcd541e69d20fb2c/image/WRAT_Predict.png'>
 
-We find that most clinical and cognitive battery fields in the PNC and BSNIP datasets are biased by demographics,
+We find that most clinical and computerized battery fields in the PNC and BSNIP datasets are biased by demographics,
 and once latent features are decorrelated by DemoVAE, are no longer significantly correlated with the fMRI data.
 
 <img src='https://github.com/aorliche/demo-vae/blob/3643570b74438692338e278cfcd541e69d20fb2c/image/Correlations.png'>
