@@ -43,7 +43,7 @@ Prediction using models trained on synthetic DemoVAE data is almost as good as p
 
 <img src='https://github.com/aorliche/demo-vae/blob/3643570b74438692338e278cfcd541e69d20fb2c/image/Prediction.png'>
 
-Preprint manuscript available at: (coming soon).
+Preprint manuscript available at: (coming soon).<br>
 Submitted to IEEE journal.
 
 Personal website: <a href='https://aorliche.github.io/'>https://aorliche.github.io/</a><br>
