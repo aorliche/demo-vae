@@ -75,6 +75,8 @@
                     <button id='difference' hx-post='/difference' hx-target='#img'>Take Difference</button>
                 </form>
             </div>
+            <p>Download <a href='/download/vae_pnc'>PNC model</a> - <a href='/download/vae_bsnip'>BSNIP model</a> as Python pickled dictionaries.</p>
+            <p>Check <a href='https://github.com/aorliche/demo-vae/blob/main/server/gen.py'>server/gen.py</a> to see how model weights are used.</p>
         </div>
         <div id='right-container'>
             <div id='img'>
@@ -102,6 +104,9 @@
         </div>
         <div id='history' hx-ext='sse' sse-connect='/history' sse-swap='update'>
         </div>
+    </div>
+    <div id='footer'>
+        <p>&#169; 2024 Anton Orlichenko<br></p>
     </div>
 </body>
 </html>

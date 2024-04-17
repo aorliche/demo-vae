@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, send_file, Response, make_response
+from flask import Flask, request, jsonify, render_template, send_file, Response, make_response, send_from_directory
 import threading
 from collections import defaultdict
 from natsort import natsorted
@@ -129,6 +129,16 @@ def difference():
     bounds = [0, 30, 35, 49, 62, 120, 125, 156, 181, 199, 212, 221, 232, 236, 264]
     img = image.imshow(imgdat, bounds=bounds)
     return render_template('image.html', img=img)
+
+# Get raw models
+@app.route('/download/vae_pnc')
+def download_pnc():
+    return send_from_directory('../data', 'vae_pnc_1000_z30_cov6_2.pkl')
+
+# Get raw models
+@app.route('/download/vae_bsnip')
+def download_bsnip():
+    return send_from_directory('../data', 'vae_bsnip_1000_z30_cov4_2.pkl')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8010, debug=True, threaded=True)
