@@ -1,9 +1,9 @@
 # Demographic-Conditioned and Decorrelated Variational Autoencoder (DemoVAE)
 Variational autoencoder generating synthetic subject FC and timeseries based on various datasets (PNC and BSNIP)
 
-- Models available in the data directory
+- On-line demo available at <a href='https://aorliche.github.io/'>https://aorliche.github.io/DemoVAE/</a>
+- Download the models from a link in the above app
 - See server directory for how to use model to generate samples
-- On-line demo available at <a href='https://aorliche.github.io/'>https://aorliche.github.io/?post=generative-fc</a>
 
 We condition a variational autoencoder on demographic data, and at the same time train it to decorrelate latent
 features from these demographics
