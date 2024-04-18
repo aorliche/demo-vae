@@ -1,0 +1,5 @@
+# List of 32 BSNIP dataset fields used in DemoVAE study
+# Description of fields may be made available upon request
+# mailto:aorlichenko@tulane.edu
+
+'DXGROUP_1', 'DXGROUP_2', 'sex', 'ethnic', 'Race', 'handed', 'MED_PSYCHOTROPIC', 'MED_ANTIP_ANY_PRI', 'MED_ANTIP_FIRSTGEN_SEC', 'MED_ANTIP_SECONDGEN_SEC', 'MED_ANTID_ANY_PRI', 'MED_ANTID_TRICYCLIC_SEC', 'MED_ANTID_MAOI_SEC', 'MED_ANTID_SSRI_SEC', 'MED_ANTID_MISC_SEC', 'MED_MOOD_ANY_PRI', 'MED_MOOD_LITHIUM_SEC', 'MED_MOOD_ANTICONVUL_SEC', 'MED_ANX_HYP_PRI', 'MED_ANTICHOL_PRI', 'MED_CENT_ACTIVE_PRI', 'MED_STIMULANTS_PRI', 'Age_cal', 'I2a', 'PANSS_PosTotal', 'PANSS_NegTotal', 'PANSS_GenTotal', 'PANSS_Total', 'pt_hollscore', 'mo_hollscore', 'fa_hollscore', 'Family_hollscore'
