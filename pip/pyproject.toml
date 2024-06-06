@@ -15,4 +15,8 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://github.com/aorliche/demo-vae/"
-Issues = "https://github.com/aorliche/demo-vae/"
+Issues = "https://github.com/aorliche/demo-vae/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
