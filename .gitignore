@@ -5,3 +5,5 @@ __pycache__/
 
 # Data too big for GitHub
 data/*
+
+**/.ipynb_checkpoints/*

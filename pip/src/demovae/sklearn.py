@@ -1,5 +1,5 @@
 
-from demovae.model import VAE, train_vae, to_numpy, demo_to_torch
+from demovae.model import VAE, train_vae, to_torch, to_cuda, to_numpy, demo_to_torch
 
 from sklearn.base import BaseEstimator
 
@@ -18,7 +18,11 @@ class DemoVAE(BaseEstimator):
                 loss_mu_mult=1,         # Mean loss (KL div)
                 loss_rec_mult=10,       # Reconstruction loss
                 loss_decor_mult=1,      # Latent-demo decorrelation loss
-                loss_pred_mult=0.001    # Classifier/regressor guidance loss
+                loss_pred_mult=0.001,   # Classifier/regressor guidance loss
+                alpha=1000,
+                LR_C=1000,
+                lr=1e-5,
+                weight_decay=1e-5,
                 )
 
     def get_params(self, **params):
@@ -31,7 +35,11 @@ class DemoVAE(BaseEstimator):
                 loss_mu_mult=self.loss_mu_mult,
                 loss_rec_mult=self.loss_rec_mult,
                 loss_decor_mult=self.loss_decor_mult,
-                loss_pred_mult=self.loss_pred_mult
+                loss_pred_mult=self.loss_pred_mult,
+                alpha=self.alpha,
+                LR_C=self.LR_C,
+                lr=self.lr,
+                weight_decay=self.weight_decay,
                 )
 
     def set_params(self, **params):
@@ -61,9 +69,10 @@ class DemoVAE(BaseEstimator):
         # Create model
         self.vae = VAE(x.shape[1], self.latent_dim, demo_dim, self.use_cuda)
         # Train model
-        self.pred_stats = train_vae(vae, x, demo, demo_types, 
+        self.pred_stats = train_vae(self.vae, x, demo, demo_types, 
                 self.nepochs, self.pperiod, self.bsize, 
-                self.loss_C_mult, self.loss_mu_mult, self.loss_rec_mult, self.loss_decor_mult, self.loss_pred_mult)
+                self.loss_C_mult, self.loss_mu_mult, self.loss_rec_mult, self.loss_decor_mult, self.loss_pred_mult,
+                self.lr, self.weight_decay, self.alpha, self.LR_C)
 
     def transform(self, x, demo, demo_types, **kwargs):
         if isinstance(x, int):
@@ -71,9 +80,9 @@ class DemoVAE(BaseEstimator):
             z = self.vae.gen(x)
         else:
             # Get latents for real data
-            z = self.vae.enc(x)
-        demo_t = demo_to_torch(demo, demo_types, self.pred_stats)
-        y = self.vae.dec(x, demo_t)
+            z = self.vae.enc(to_cuda(to_torch(x), self.vae.use_cuda))
+        demo_t = demo_to_torch(demo, demo_types, self.pred_stats, self.vae.use_cuda)
+        y = self.vae.dec(z, demo_t)
         return to_numpy(y)
 
     def fit_transform(self, x, demo, demo_types, **kwargs):
