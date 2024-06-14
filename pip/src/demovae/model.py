@@ -31,7 +31,7 @@ class VAE(nn.Module):
         self.enc1 = to_cuda(nn.Linear(input_dim, 1000).float(), use_cuda)
         self.enc2 = to_cuda(nn.Linear(1000, latent_dim).float(), use_cuda)
         self.dec1 = to_cuda(nn.Linear(latent_dim+demo_dim, 1000).float(), use_cuda)
-        self.dec2 = to_cuda(nn.Linear(1000, 264*5).float(), use_cuda)
+        self.dec2 = to_cuda(nn.Linear(1000, input_dim).float(), use_cuda)
 
     def enc(self, x):
         x = F.relu(self.enc1(x))
@@ -45,10 +45,10 @@ class VAE(nn.Module):
         z = to_cuda(torch.cat([z, demo], dim=1), self.use_cuda)
         x = F.relu(self.dec1(z))
         x = self.dec2(x)
-        x = x.reshape(len(z), 264, 5)
-        x = torch.einsum('nac,nbc->nab', x, x)
-        a,b = np.triu_indices(264, 1)
-        x = x[:,a,b]
+        #x = x.reshape(len(z), 264, 5)
+        #x = torch.einsum('nac,nbc->nab', x, x)
+        #a,b = np.triu_indices(264, 1)
+        #x = x[:,a,b]
         return x
 
 def rmse(a, b, mean=torch.mean):
@@ -70,6 +70,8 @@ def decor_loss(z, demo, use_cuda=True):
         d = demo[:,di]
         d = d - torch.mean(d)
         p = torch.einsum('n,nz->z', d, z)
+        p = p/torch.std(d)
+        p = p/torch.einsum('nz,nz->z', z, z)
         tgt = to_cuda(torch.zeros(z.shape[-1]).float(), use_cuda)
         loss = rmse(p, tgt)
         losses.append(loss)
@@ -82,23 +84,29 @@ def pretty(x):
 
 def demo_to_torch(demo, demo_types, pred_stats, use_cuda):
     demo_t = []
+    demo_idx = 0
     for d,t,s in zip(demo, demo_types, pred_stats):
         if t == 'continuous':
             demo_t.append(to_cuda(to_torch(d), use_cuda))
         elif t == 'categorical':
+            for dd in d:
+                if dd not in s:
+                    print(f'Model not trained with value {dd} for categorical demographic {demo_idx}')
+                    raise Exception('Bad demographic')
             for ss in s:
-                idx = (d == ss).astype('int')
+                idx = (d == ss).astype('bool')
                 zeros = torch.zeros(len(d))
                 zeros[idx] = 1
                 demo_t.append(to_cuda(zeros, use_cuda))
+        demo_idx += 1
     demo_t = torch.stack(demo_t).permute(1,0)
     return demo_t
 
-def train_vae(vae, x, demo, demo_types, nepochs, pperiod, bsize, loss_C_mult, loss_mu_mult, loss_rec_mult, loss_decor_mult, loss_pred_mult, lr, weight_decay, alpha, LR_C):
+def train_vae(vae, x, demo, demo_types, nepochs, pperiod, bsize, loss_C_mult, loss_mu_mult, loss_rec_mult, loss_decor_mult, loss_pred_mult, lr, weight_decay, alpha, LR_C, ret_obj):
     # Get linear predictors for demographics
     pred_w = []
     pred_i = []
-    # Pred stats are mean and std for continuous, and a list of all values for continuous
+    # Pred stats are mean and std for continuous, and a list of all values for categorical
     pred_stats = []
     for i,d,t in zip(range(len(demo)), demo, demo_types):
         print(f'Fitting auxilliary guidance model for demographic {i} {t}...', end='')
@@ -131,6 +139,7 @@ def train_vae(vae, x, demo, demo_types, nepochs, pperiod, bsize, loss_C_mult, lo
             print(f'demographic type "{t}" not "continuous" or "categorical"')
             raise Exception('Bad demographic type')
         print(' done')
+    ret_obj.pred_stats = pred_stats
     # Convert input to pytorch
     print('Converting input to pytorch')
     x = to_cuda(to_torch(x), vae.use_cuda)
@@ -205,9 +214,8 @@ def train_vae(vae, x, demo, demo_types, nepochs, pperiod, bsize, loss_C_mult, lo
                 print(f'MeanLoss {pretty(loss_mu)} ', end='')
                 print(f'DecorLoss {pretty(loss_decor)} ', end='')
                 losses_pred = [pretty(loss) for loss in losses_pred]
-                print(f'GuidanceLosses {idcs} {losses_pred} ', end='')
+                print(f'GuidanceTargets {idcs} GuidanceLosses {losses_pred} ', end='')
                 print()
     print('Training complete.')
-    return pred_stats
                 
 

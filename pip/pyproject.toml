@@ -1,11 +1,12 @@
 [project]
 name = "demovae"
-version = "0.0.1"
+version = "0.0.3"
 authors = [
 	{ name="Anton Orlichenko", email="aorliche@gmail.com" }
 ]
 description = "A demographic-conditioned variational autoencoder for fMRI distribution sampling, removal of confounds, and multi-site harmonization. Works with FC, ALFF, or ReHO data."
 readme = "README.md"
+dependencies = [ "numpy", "torch", "scikit-learn" ]
 requires-python = ">=3.8"
 classifiers = [
 	"Programming Language :: Python :: 3",

@@ -9,20 +9,20 @@ class DemoVAE(BaseEstimator):
 
     @staticmethod
     def get_default_params():
-        return dict(latent_dim=100, 
-                use_cuda=True,
+        return dict(latent_dim=30,      # Latent dimension
+                use_cuda=True,          # GPU acceleration
                 nepochs=5000,           # Training epochs
                 pperiod=100,            # Epochs between printing updates 
                 bsize=1000,             # Batch size
                 loss_C_mult=1,          # Covariance loss (KL div)
                 loss_mu_mult=1,         # Mean loss (KL div)
-                loss_rec_mult=10,       # Reconstruction loss
-                loss_decor_mult=1,      # Latent-demo decorrelation loss
+                loss_rec_mult=1,        # Reconstruction loss
+                loss_decor_mult=1,      # Latent-demographic decorrelation loss
                 loss_pred_mult=0.001,   # Classifier/regressor guidance loss
-                alpha=1000,
-                LR_C=1000,
-                lr=1e-5,
-                weight_decay=1e-5,
+                alpha=100,              # Regularization for continuous guidance models
+                LR_C=100,               # Regularization for categorical guidance models
+                lr=1e-4,                # Learning rate
+                weight_decay=0,         # L2 regularization for VAE model
                 )
 
     def get_params(self, **params):
@@ -69,10 +69,11 @@ class DemoVAE(BaseEstimator):
         # Create model
         self.vae = VAE(x.shape[1], self.latent_dim, demo_dim, self.use_cuda)
         # Train model
-        self.pred_stats = train_vae(self.vae, x, demo, demo_types, 
+        train_vae(self.vae, x, demo, demo_types, 
                 self.nepochs, self.pperiod, self.bsize, 
                 self.loss_C_mult, self.loss_mu_mult, self.loss_rec_mult, self.loss_decor_mult, self.loss_pred_mult,
-                self.lr, self.weight_decay, self.alpha, self.LR_C)
+                self.lr, self.weight_decay, self.alpha, self.LR_C, 
+                self)
 
     def transform(self, x, demo, demo_types, **kwargs):
         if isinstance(x, int):
