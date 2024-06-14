@@ -15,6 +15,28 @@ Check the file <a href='https://github.com/aorliche/demo-vae/blob/main/test/Pip3
 
 Site harmonization may be achieved by fitting the model then transforming original data with changed "demographics" (i.e., site codes).
 
+Check <a href='https://github.com/aorliche/demo-vae/blob/main/pip/src/demovae/sklearn.py'>this file</a> in the pip subdirectory to see all of the configuration parameters you can set, e.g.:
+
+```
+    @staticmethod
+    def get_default_params():
+        return dict(latent_dim=30,      # Latent dimension
+                use_cuda=True,          # GPU acceleration
+                nepochs=5000,           # Training epochs
+                pperiod=100,            # Epochs between printing updates 
+                bsize=1000,             # Batch size
+                loss_C_mult=1,          # Covariance loss (KL div)
+                loss_mu_mult=1,         # Mean loss (KL div)
+                loss_rec_mult=1,        # Reconstruction loss
+                loss_decor_mult=1,      # Latent-demographic decorrelation loss
+                loss_pred_mult=0.001,   # Classifier/regressor guidance loss
+                alpha=100,              # Regularization for continuous guidance models
+                LR_C=100,               # Regularization for categorical guidance models
+                lr=1e-4,                # Learning rate
+                weight_decay=0,         # L2 regularization for VAE model
+                )
+```
+
 # Features
 
 - On-line demo available at <a href='https://aorliche.github.io/'>https://aorliche.github.io/DemoVAE/</a>
