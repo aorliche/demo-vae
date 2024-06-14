@@ -1,5 +1,21 @@
 # Demographic-Conditioned and Decorrelated Variational Autoencoder (DemoVAE)
-Variational autoencoder generating synthetic subject FC and timeseries based on various datasets (PNC and BSNIP)
+Variational autoencoder generating synthetic subject FC and other fixed-length modalities of fMRI for distribution sampling, removal of confounds, and demographic-change or site harmonization.
+
+# Installable pip package
+
+Run 
+
+```
+pip install demovae
+```
+
+to install demovae along with basic dependencies (numpy, scikit-learn, and torch).
+
+Check the file <a href='https://github.com/aorliche/demo-vae/blob/main/test/Pip3TestSample.ipynb'>Pip3TestSample.ipynb</a> for a basic idea of how to run the code.
+
+Site harmonization may be achieved by fitting the model then transforming original data with changed "demographics" (i.e., site codes).
+
+# Features
 
 - On-line demo available at <a href='https://aorliche.github.io/'>https://aorliche.github.io/DemoVAE/</a>
 - Download the models from a link in the above app
@@ -43,7 +59,7 @@ Prediction using models trained on synthetic DemoVAE data is almost as good as p
 
 <img src='https://github.com/aorliche/demo-vae/blob/3643570b74438692338e278cfcd541e69d20fb2c/image/Prediction.png'>
 
-Preprint manuscript available at: (coming soon).<br>
+Preprint manuscript available at: <a href='https://arxiv.org/abs/2405.07977'>arXiv</a>.<br>
 Submitted to IEEE journal.
 
 Personal website: <a href='https://aorliche.github.io/'>https://aorliche.github.io/</a><br>
